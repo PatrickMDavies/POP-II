@@ -48,9 +48,6 @@ public class FractionImpl implements Fraction {
                         }
                     }
 
-                    /** This method finds the GCD of the fraction*/
-
-
 
 
     /**
@@ -120,6 +117,8 @@ public class FractionImpl implements Fraction {
         }
     }
 
+    /** This method finds the Greatest Common Divisor of the fraction. That is the biggest number that
+     * the numerator and denominator can be divided by, giving an integer result.*/
     private int GreatestCommonDivisor(int n, int d){
 
         if ( n < 0 ){
@@ -131,6 +130,12 @@ public class FractionImpl implements Fraction {
 
         while (larger != 0 && smaller != 0) {
             larger = larger % smaller;
+            if (smaller > larger){
+                int temp = 0;
+                temp = smaller;
+                smaller = larger;
+                larger = temp;
+            }
         }
         int GCD = Math.max(larger, smaller);
 
@@ -139,60 +144,99 @@ public class FractionImpl implements Fraction {
 
     /**
      * @inheritDoc
-     * a/b + c/d is (ad + bc)/bd
+     * This method is the addition operation for fractions. It sums two fractions and
+     * gives the total. The result is a new fraction.
      */
     @Override
     public Fraction add(Fraction f) {
 
-        int n = ( this.numerator * ((FractionImpl)f).denominator) + ( this.denominator *
+        int NewNumerator = ( this.numerator * ((FractionImpl)f).denominator) + ( this.denominator *
                 ((FractionImpl)f).numerator);
-        int d = ( this.denominator * ((FractionImpl)f).denominator);
+        int NewDenominator = ( this.denominator * ((FractionImpl)f).denominator);
 
-        System.out.println(n);
-        System.out.println(d);
-
-        Fraction result = new FractionImpl(n,d);
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
 
     return result;}
 
     /**
      * @inheritDoc
+     * This method is the subtraction operation for fractions.This method
+     * gives the difference between two fractions. The result is a new fraction.
+     *
      */
     @Override
     public Fraction subtract(Fraction f) {
-        return null;
+        int NewNumerator =  ( this.numerator * ((FractionImpl)f).denominator ) - ( this.denominator *
+                ((FractionImpl)f).numerator );
+        int NewDenominator = ( this.denominator * ((FractionImpl)f).denominator );
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
     }
 
     /**
      * @inheritDoc
+     * This method is the multiplication operation for fractions. This method
+     * gives the product of two fractions. The result is a new fraction.
+     *
      */
     @Override
     public Fraction multiply(Fraction f) {
-        return null;
+        int NewNumerator =  ( this.numerator * ((FractionImpl)f).numerator );
+        int NewDenominator = ( this.denominator * ((FractionImpl)f).denominator );
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
     }
 
     /**
      * @inheritDoc
+     * This method is the division operation for fractions. This method
+     * gives the quotient of two fractions. The result is a new fraction.
+     *
      */
     @Override
     public Fraction divide(Fraction f) {
-        return null;
+        int NewNumerator =  ( this.numerator * ((FractionImpl)f).denominator );
+        int NewDenominator = ( this.denominator * ((FractionImpl)f).numerator );
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
+
     }
 
     /**
      * @inheritDoc
+     * This method gives the absolute value (or modulus) of a fraction. It
+     * gives the non-negative value of a fraction. The result is a new fraction.
      */
     @Override
     public Fraction abs() {
-        return null;
+        int NewNumerator = Math.abs(this.numerator);
+        int NewDenominator = this.denominator;
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
     }
 
     /**
      * @inheritDoc
+     * This method gives the negative of a fraction. It gives a negative value
+     * for positive fractions, and a positive value for negative ones. The result is a
+     * new fraction.
      */
     @Override
     public Fraction negate() {
-        return null;
+        int NewNumerator = ( this.numerator* -1 );
+        int NewDenominator = this.denominator;
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
     }
 
     /**
@@ -205,9 +249,14 @@ public class FractionImpl implements Fraction {
 
     /**
      * @inheritDoc
+     * This method compares two objects. If they are fractions with the same value,
+     * it gives the result 'true'. Otherwise, the result is 'false'.
      */
     @Override
     public boolean equals(Object obj) {
+        if ( obj instanceof Fraction == false){
+            return false;}
+
         return super.equals(obj);
     }
 
@@ -221,18 +270,30 @@ public class FractionImpl implements Fraction {
 
     /**
      * @inheritDoc
+     * This method is the inversion operation for a fraction. It switches the
+     * numerator and denominator of a fraction. The result is a new fraction.
      */
     @Override
     public Fraction inverse() {
-        return null;
+        int NewNumerator = this.denominator;
+        int NewDenominator = this.numerator;
+
+        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+
+        return result;
     }
 
     /**
      * @inheritDoc
+     * This method returns
      */
     @Override
     public int compareTo(Fraction o) {
-        return 0;
+        Fraction Result = this.subtract(o);
+
+        return ((FractionImpl)Result).numerator;
+
+
     }
 
     /**
