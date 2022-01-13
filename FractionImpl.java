@@ -9,44 +9,38 @@ public class FractionImpl implements Fraction {
     private int denominator;
 
     /**
-     * Parameters are the <em>numerator</em> and the <em>denominator</em>.
-     * Normalize the fraction as you create it.
-     * For instance, if the parameters are <pre>(8, -12)</pre>, create a <pre>Fraction</pre> with numerator
-     * <pre>-2</pre> and denominator <pre>3</pre>.
+     * This method creates a new fraction.
      *
-     * The constructor should throw an <pre>ArithmeticException</pre> if the denominator is zero.
+     * The constructor throws an ArithmeticException if the denominator is zero.
      *
-     * @param numerator
-     * @param denominator
+     * @param numerator - an integer representing the numerator of the fraction.
+     * @param denominator - an integer representing the denominator of the fraction.
      */
 
     public FractionImpl(int numerator, int denominator) {
         // TODO
 
-        if(denominator == 0) {
-            throw new ArithmeticException("Denominator is zero");
-        }
-        else {
-            if (numerator == 0 && denominator == 0){
+        if (denominator == 0) {
+            if (numerator == 0) {
                 denominator = 1;
+            } else {
+                throw new ArithmeticException("Denominator is zero");
             }
+        }
 
-            if (denominator < 0) {
-                numerator *= -1;
-                denominator *= -1;
-            }
-            if (denominator == 0) {
-                throw new ArithmeticException("Divide by zero");
-            }
+        if (denominator < 0) {
+            numerator *= -1;
+            denominator *= -1;
+        }
 
-            int GCD = GreatestCommonDivisor(numerator, denominator);
-            numerator /= GCD;
-            denominator /= GCD;
+        int GCD = GreatestCommonDivisor(numerator, denominator);
+        numerator /= GCD;
+        denominator /= GCD;
 
-                            this.numerator = numerator;
-                            this.denominator = denominator;
-                        }
+                        this.numerator = numerator;
+                        this.denominator = denominator;
                     }
+
 
 
 
@@ -71,14 +65,13 @@ public class FractionImpl implements Fraction {
      * <p>
      * You may find it helpful to look at the available String API methods in the Java API.
      *
-     * @param fraction the string representation of the fraction
+     * @param fraction the string representation of the fraction.
      */
 
     public FractionImpl(String fraction) {
         // TODO
         // Need to remove spaces (but not if they are within integers)
         try {
-
 
             int num = 1;
             int den = 1;
@@ -92,15 +85,38 @@ public class FractionImpl implements Fraction {
 
             if (ContainsSlash == true) {
                 String frac[] = fraction.split("/");
-                frac[0].replaceAll("\\s", "");
-                frac[1].replaceAll("\\s", "");
+                String Trimmed_Numerator = frac[0].replaceAll(" ", "");
+                for (int x = 0; x < Trimmed_Numerator.length(); x++) {
+                    if (Character.isWhitespace(Trimmed_Numerator.charAt(x))){
+                        throw new IllegalArgumentException("Spaces within integer");}
+                }
+                String Trimmed_Denominator = frac[1].replaceAll(" ", "");
+                for (int x = 0; x < Trimmed_Denominator.length(); x++) {
+                    if (Character.isWhitespace(Trimmed_Denominator.charAt(x))){
+                        throw new IllegalArgumentException("Spaces within integer");}
+                }
+
                 num = Integer.parseInt(frac[0]);
                 den = Integer.parseInt(frac[1]);
 
 
             } else if (ContainsSlash == false) {
-                num = Integer.parseInt(fraction);
-                den = 1;
+                fraction.trim();
+                for (int x = 0; x < fraction.length(); x++) {
+                    if (Character.isWhitespace(fraction.charAt(x))) {
+                        throw new IllegalArgumentException("Spaces within integer");
+                    }
+                    num = Integer.parseInt(fraction);
+                    den = 1;
+                }
+            }
+
+            if (denominator == 0) {
+                if (numerator == 0) {
+                    denominator = 1;
+                } else {
+                    throw new ArithmeticException("Denominator is zero");
+                }
             }
 
             int GCD = GreatestCommonDivisor(num, den);
@@ -112,21 +128,28 @@ public class FractionImpl implements Fraction {
         }
         catch(NumberFormatException ex){
             System.out.println("That string could not be parsed into numbers. Please try again.");
-
-
+            this.numerator = 0;
+            this.denominator = 1;
         }
     }
 
-    /** This method finds the Greatest Common Divisor of the fraction. That is the biggest number that
-     * the numerator and denominator can be divided by, giving an integer result.*/
-    private int GreatestCommonDivisor(int n, int d){
+    /** This method finds the Greatest Common Divisor of two numbers. That is the biggest number
+     * that both numbers can be divided by, giving an integer result.
+     *
+     * This method accepts two integers as its arguments.
+     *
+     * @param x - the first integer.
+     * @param y - the second integer.
+     *
+     * */
+    private int GreatestCommonDivisor(int x, int y){
 
-        if ( n < 0 ){
-            n *= 1;
+        if ( x < 0 ){
+            y *= 1;
         }
 
-        int larger = Math.max( Math.abs(n), Math.abs(d) );
-        int smaller = Math.min( Math.abs(n), Math.abs(d) );
+        int larger = Math.max( Math.abs(x), Math.abs(y) );
+        int smaller = Math.min( Math.abs(x), Math.abs(y) );
 
         while (larger != 0 && smaller != 0) {
             larger = larger % smaller;
@@ -146,6 +169,10 @@ public class FractionImpl implements Fraction {
      * @inheritDoc
      * This method is the addition operation for fractions. It sums two fractions and
      * gives the total. The result is a new fraction.
+     *
+     * This method takes one fraction as its argument.
+     *
+     * @param f - the fraction to be added to the current fraction (this).
      */
     @Override
     public Fraction add(Fraction f) {
@@ -162,6 +189,10 @@ public class FractionImpl implements Fraction {
      * @inheritDoc
      * This method is the subtraction operation for fractions.This method
      * gives the difference between two fractions. The result is a new fraction.
+     *
+     * This method takes one fraction as its argument.
+     *
+     * @param f - the fraction to be added to the current fraction (this).
      *
      */
     @Override
@@ -180,6 +211,9 @@ public class FractionImpl implements Fraction {
      * This method is the multiplication operation for fractions. This method
      * gives the product of two fractions. The result is a new fraction.
      *
+     * This method takes one fraction as its argument.
+     *
+     * @param f - the fraction to multiply the current fraction (this) by.
      */
     @Override
     public Fraction multiply(Fraction f) {
@@ -196,6 +230,9 @@ public class FractionImpl implements Fraction {
      * This method is the division operation for fractions. This method
      * gives the quotient of two fractions. The result is a new fraction.
      *
+     * This method takes one fraction as its argument.
+     *
+     * @param f - the fraction to divide the current fraction (this) by.
      */
     @Override
     public Fraction divide(Fraction f) {
@@ -212,6 +249,9 @@ public class FractionImpl implements Fraction {
      * @inheritDoc
      * This method gives the absolute value (or modulus) of a fraction. It
      * gives the non-negative value of a fraction. The result is a new fraction.
+     *
+     * This method takes no arguments.
+     *
      */
     @Override
     public Fraction abs() {
@@ -228,6 +268,8 @@ public class FractionImpl implements Fraction {
      * This method gives the negative of a fraction. It gives a negative value
      * for positive fractions, and a positive value for negative ones. The result is a
      * new fraction.
+     *
+     * This method takes no arguments.
      */
     @Override
     public Fraction negate() {
@@ -251,6 +293,10 @@ public class FractionImpl implements Fraction {
      * @inheritDoc
      * This method compares two objects. If they are fractions with the same value,
      * it gives the result 'true'. Otherwise, the result is 'false'.
+     *
+     * This method takes one object as its argument.
+     *
+     * @param obj - the object to be compared with the current fraction (this).
      */
     @Override
     public boolean equals(Object obj) {
@@ -272,6 +318,8 @@ public class FractionImpl implements Fraction {
      * @inheritDoc
      * This method is the inversion operation for a fraction. It switches the
      * numerator and denominator of a fraction. The result is a new fraction.
+     *
+     * This method takes no arguments.
      */
     @Override
     public Fraction inverse() {
@@ -285,7 +333,12 @@ public class FractionImpl implements Fraction {
 
     /**
      * @inheritDoc
-     * This method returns
+     * This method returns 0 if two fractions are the same, a positive integer if the
+     * fraction accepted as an argument is smaller, and a negative integer otherwise.
+     *
+     * This method takes one fraction as its argument.
+     *
+     * @param o - the fraction to be compared with the current fraction (this).
      */
     @Override
     public int compareTo(Fraction o) {
@@ -298,6 +351,11 @@ public class FractionImpl implements Fraction {
 
     /**
      * @inheritDoc
+     * This method generates a string representation of a fraction. The string
+     * is of the form 'numerator/denominator', but only the numerator is used if
+     * the denominator is 1.
+     *
+     *
      */
     @Override
     public String toString() {
@@ -305,6 +363,10 @@ public class FractionImpl implements Fraction {
 
         if (denominator != 1){
             Result = Result.concat("/" + Integer.toString(denominator));}
+
+        if (numerator == 0){
+            Result = "0";
+        }
 
         return Result;
     }
