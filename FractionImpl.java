@@ -86,18 +86,17 @@ public class FractionImpl implements Fraction {
             if (ContainsSlash == true) {
                 String frac[] = fraction.split("/");
                 String Trimmed_Numerator = frac[0].replaceAll(" ", "");
+                Trimmed_Numerator = Trimmed_Numerator.trim();
                 for (int x = 0; x < Trimmed_Numerator.length(); x++) {
                     if (Character.isWhitespace(Trimmed_Numerator.charAt(x))){
                         throw new IllegalArgumentException("Spaces within integer");}
-                }
+                    num = Integer.parseInt(Trimmed_Numerator);}
                 String Trimmed_Denominator = frac[1].replaceAll(" ", "");
+                Trimmed_Denominator = Trimmed_Denominator.trim();
                 for (int x = 0; x < Trimmed_Denominator.length(); x++) {
                     if (Character.isWhitespace(Trimmed_Denominator.charAt(x))){
                         throw new IllegalArgumentException("Spaces within integer");}
-                }
-
-                num = Integer.parseInt(frac[0]);
-                den = Integer.parseInt(frac[1]);
+                    den = Integer.parseInt(Trimmed_Denominator);}
 
 
             } else if (ContainsSlash == false) {
@@ -300,11 +299,12 @@ public class FractionImpl implements Fraction {
      */
     @Override
     public boolean equals(Object obj) {
-        if ( obj instanceof Fraction == false){
-            return false;}
-
-        return super.equals(obj);
-    }
+        boolean Result = false;
+        if (obj instanceof Fraction)
+            { if (((Fraction) obj).compareTo(this) == 0){
+                Result = true;}
+        } else {Result = false;}
+        return Result;}
 
     /**
      * @inheritDoc
@@ -323,13 +323,19 @@ public class FractionImpl implements Fraction {
      */
     @Override
     public Fraction inverse() {
-        int NewNumerator = this.denominator;
-        int NewDenominator = this.numerator;
+        Fraction result;
 
-        Fraction result = new FractionImpl(NewNumerator, NewDenominator);
+        if (this.numerator != 0){
+            int NewNumerator = this.denominator;
+            int NewDenominator = this.numerator;
 
-        return result;
-    }
+            result = new FractionImpl(NewNumerator, NewDenominator);
+
+            }
+        else {result = new FractionImpl(0,1);}
+
+
+            return result;}
 
     /**
      * @inheritDoc
@@ -345,8 +351,6 @@ public class FractionImpl implements Fraction {
         Fraction Result = this.subtract(o);
 
         return ((FractionImpl)Result).numerator;
-
-
     }
 
     /**
