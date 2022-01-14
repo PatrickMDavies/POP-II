@@ -1,6 +1,11 @@
 // 13808858
 // patrickmdavies@hotmail.co.uk
 
+/**
+ * This is an API which allows users to create and manipulate fractions, using
+ * a number of mathematical operators as methods.
+ */
+
 package fraction;
 
 import java.lang.*;
@@ -8,8 +13,8 @@ import java.lang.reflect.Constructor;
 import java.math.*;
 
 public class FractionImpl implements Fraction {
-    private int numerator;
-    private int denominator;
+    private int numerator;        // The top number of a fraction
+    private int denominator;      // The bottom number a fraction = never zero
 
     /**
      * This method creates a new fraction.
@@ -36,8 +41,8 @@ public class FractionImpl implements Fraction {
             denominator *= -1;
         }
 
-        int GCD = GreatestCommonDivisor(numerator, denominator);
-        numerator /= GCD;
+        int GCD = greatestCommonDivisor(numerator, denominator);
+        numerator /= GCD;               // GCD is Greatest Common Divisor
         denominator /= GCD;
 
                         this.numerator = numerator;
@@ -76,8 +81,8 @@ public class FractionImpl implements Fraction {
         // Need to remove spaces (but not if they are within integers)
         try {
 
-            int num = 1;
-            int den = 1;
+            int num = 1;        // The numerator of the entered fraction
+            int den = 1;        // The denominator of the entered fraction
 
             // Determine whether string has a slash (and therefore has a denominator)
             boolean ContainsSlash = false;
@@ -86,14 +91,17 @@ public class FractionImpl implements Fraction {
                     ContainsSlash = true;}
             }
 
+            // for strings with a numerator and denominator
             if (ContainsSlash == true) {
                 String frac[] = fraction.split("/");
+                // remove whitespace from numerator
                 String Trimmed_Numerator = frac[0].replaceAll(" ", "");
                 Trimmed_Numerator = Trimmed_Numerator.trim();
                 for (int x = 0; x < Trimmed_Numerator.length(); x++) {
                     if (Character.isWhitespace(Trimmed_Numerator.charAt(x))){
                         throw new IllegalArgumentException("Spaces within integer");}
                     num = Integer.parseInt(Trimmed_Numerator);}
+                // remove whitespace from denominator
                 String Trimmed_Denominator = frac[1].replaceAll(" ", "");
                 Trimmed_Denominator = Trimmed_Denominator.trim();
                 for (int x = 0; x < Trimmed_Denominator.length(); x++) {
@@ -101,7 +109,7 @@ public class FractionImpl implements Fraction {
                         throw new IllegalArgumentException("Spaces within integer");}
                     den = Integer.parseInt(Trimmed_Denominator);}
 
-
+            // This removes whitespace from whole number fractions entered as a string
             } else if (ContainsSlash == false) {
                 fraction.trim();
                 for (int x = 0; x < fraction.length(); x++) {
@@ -109,7 +117,7 @@ public class FractionImpl implements Fraction {
                         throw new IllegalArgumentException("Spaces within integer");
                     }
                     num = Integer.parseInt(fraction);
-                    den = 1;
+                    den = 1; // Denominator is 1 by default
                 }
             }
 
@@ -121,8 +129,8 @@ public class FractionImpl implements Fraction {
                 }
             }
 
-            int GCD = GreatestCommonDivisor(num, den);
-            num /= GCD;
+            int GCD = greatestCommonDivisor(num, den);
+            num /= GCD;         // GCD is Greatest Common Divisor
             den /= GCD;
 
             this.numerator = Integer.valueOf(num);
@@ -144,11 +152,7 @@ public class FractionImpl implements Fraction {
      * @param y - the second integer.
      *
      * */
-    private int GreatestCommonDivisor(int x, int y){
-
-        if ( x < 0 ){
-            y *= 1;
-        }
+    int greatestCommonDivisor(int x, int y){
 
         int larger = Math.max( Math.abs(x), Math.abs(y) );
         int smaller = Math.min( Math.abs(x), Math.abs(y) );
@@ -162,7 +166,7 @@ public class FractionImpl implements Fraction {
                 larger = temp;
             }
         }
-        int GCD = Math.max(larger, smaller);
+        int GCD = Math.max(larger, smaller); // GCD is Greatest Common Divisor
 
         return GCD;
     }

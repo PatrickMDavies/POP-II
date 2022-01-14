@@ -22,6 +22,19 @@ class FractionImplTest {
     Fraction a10 = new FractionImpl(-4);
     Fraction a11 = new FractionImpl("1 / 1 7 ");
 
+    @Test
+    void greatestCommonDivisor() {
+        assertEquals("1/4", a1.toString(),
+                "A positive fraction that cannot be normalised so it should remain");
+        assertEquals("4", a6.toString(),
+                "A positive fraction that is normalised by the method");
+        assertEquals("-1/4", a3.toString(),
+                "A negative fraction that is normalised by the method");
+        assertEquals("-2/3", a5.toString(),
+                "A negative fraction that cannot be normalised so it should remain");
+        assertEquals("0", a4.toString(),
+                "A fraction with value zero");
+    }
 
 
     @Test
